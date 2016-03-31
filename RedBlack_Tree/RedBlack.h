@@ -123,15 +123,32 @@ void RB_print_dot_aux(RedBlack *node, FILE *stream) {
     static int nullcount = 0;
 
     if (node->left) {
-        fprintf(stream, "    %d -> %d;\n", node->data, node->left->data);
-        RB_print_dot_aux(node->left, stream);
+
+        if (node->left->color) {
+            fprintf(stream, "    %d -> %d;\n", node->data, node->left->data);
+            fprintf(stream, "    %d [color=red];\n", node->left->data);
+            RB_print_dot_aux(node->left, stream);
+
+        }
+        else {
+            fprintf(stream, "    %d -> %d;\n", node->data, node->left->data);
+            RB_print_dot_aux(node->left, stream);
+        }
     }
     else
         RB_print_dot_null(node->data, nullcount++, stream);
 
     if (node->right) {
-        fprintf(stream, "    %d -> %d;\n", node->data, node->right->data);
-        RB_print_dot_aux(node->right, stream);
+
+        if (node->right->color) {
+            fprintf(stream, "    %d -> %d;\n", node->data, node->right->data);
+            fprintf(stream, "    %d [color=red];\n", node->right->data);
+            RB_print_dot_aux(node->right, stream);
+        }
+        else {
+            fprintf(stream, "    %d -> %d;\n", node->data, node->right->data);
+            RB_print_dot_aux(node->right, stream);
+        }
     }
     else
         RB_print_dot_null(node->data, nullcount++, stream);
@@ -145,9 +162,12 @@ void RB_print_dot(RedBlack *tree, FILE *stream) {
         fprintf(stream, "\n");
     else if (!tree->right && !tree->left)
         fprintf(stream, "    %d;\n", tree->data);
-    else
+    else {
+        if (tree->color) {
+            fprintf(stream, "    %d [color=red];\n", tree->data);
+        }
         RB_print_dot_aux(tree, stream);
-
+    }
     fprintf(stream, "}\n");
 }
 

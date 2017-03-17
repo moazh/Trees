@@ -7,17 +7,16 @@
 
 #include <stdio.h>
 
-class AVL {
+class AVLTree {
 public:
     int data;
-    AVL *left;
-    AVL *right;
+    AVLTree *left;
+    AVLTree *right;
     int height;
-    int number;
 
 };
 
-bool search_AVL(AVL *avl, int data) {
+bool search_AVL(AVLTree *avl, int data) {
 
     if (avl == NULL)
         return false;
@@ -29,21 +28,16 @@ bool search_AVL(AVL *avl, int data) {
         return search_AVL(avl->right, data);
 }
 
-int size(AVL *tree) {
-    if (tree == NULL)
-        return 0;
-    return tree->number;
 
-}
 
-int heightAVL(AVL *tree) {
+int heightAVL(AVLTree *tree) {
     if (tree == NULL)
         return -1;
 
     return tree->height;
 }
 
-int isBalanced(AVL *tree) {
+int isBalanced(AVLTree *tree) {
     return heightAVL(tree->left) - heightAVL(tree->right);
 }
 
@@ -55,33 +49,29 @@ int MAX(int a, int b) {
     else return a;
 }
 
-AVL *rotateRight(AVL *tree) {
+AVLTree *rotateRight(AVLTree *tree) {
 
-    AVL *node = tree->left;
+    AVLTree *node = tree->left;
     tree->left = node->right;
     node->right = tree;
-    node->number = tree->number;
-    tree->number = 1 + size(tree->left) + size(tree->right);
     tree->height = 1 + MAX(heightAVL(tree->left), heightAVL(tree->right));
     node->height = 1 + MAX(heightAVL(node->left), heightAVL(node->right));
 
     return node;
 }
 
-AVL *rotateLeft(AVL *tree) {
+AVLTree *rotateLeft(AVLTree *tree) {
 
-    AVL *node = tree->right;
+    AVLTree *node = tree->right;
     tree->right = node->left;
     node->left = tree;
-    node->number = tree->number;
-    tree->number = 1 + size(tree->left) + size(tree->right);
     tree->height = 1 + MAX(heightAVL(tree->left), heightAVL(tree->right));
     node->height = 1 + MAX(heightAVL(node->left), heightAVL(node->right));
 
     return node;
 }
 
-AVL *balance(AVL *tree) {
+AVLTree *balance(AVLTree *tree) {
 
     if (isBalanced(tree) < -1) {
         if (isBalanced(tree->right) > 0) {
@@ -98,18 +88,17 @@ AVL *balance(AVL *tree) {
     return tree;
 }
 
-AVL *createNode_AVL(int data) {
+AVLTree *createNode_AVL(int data) {
 
-    AVL *node = new AVL();
+    AVLTree *node = new AVLTree();
     node->data = data;
     node->left = node->right = NULL;
     node->height = 0;
-    node->number = 1;
 
     return node;
 }
 
-AVL *insert_AVL(AVL *tree, int data) {
+AVLTree *insert_AVL(AVLTree *tree, int data) {
 
     if (tree == NULL)
         tree = createNode_AVL(data);
@@ -122,13 +111,12 @@ AVL *insert_AVL(AVL *tree, int data) {
         return tree;
     }
 
-    tree->number = 1 + size(tree->left) + size(tree->right);
     tree->height = 1 + MAX(heightAVL(tree->left), heightAVL(tree->right));
 
     return balance(tree);
 }
 
-void traverse_AVL_INORDER(AVL *tree) {
+void traverse_AVL_INORDER(AVLTree *tree) {
 
     if (tree == NULL)
         return;
@@ -138,22 +126,21 @@ void traverse_AVL_INORDER(AVL *tree) {
     traverse_AVL_INORDER(tree->right);
 }
 
-AVL *MIN(AVL *tree) {
+AVLTree *MIN(AVLTree *tree) {
     if (tree->left == NULL) return tree;
 
     return MIN(tree->left);
 }
 
-AVL *deleteMin(AVL *tree) {
+AVLTree *deleteMin(AVLTree *tree) {
     if (tree->left == NULL)
         return tree->right;
     tree->left = deleteMin(tree->left);
-    tree->number = 1 + size(tree->left) + size(tree->right);
     tree->height = 1 + MAX(heightAVL(tree->left), heightAVL(tree->right));
     return balance(tree);
 }
 
-AVL *deleteNode(AVL *tree, int data) {
+AVLTree *deleteNode(AVLTree *tree, int data) {
     if (tree == NULL)
         return tree;
     else if (tree->data > data)
@@ -169,13 +156,12 @@ AVL *deleteNode(AVL *tree, int data) {
             return tree->left;
         }
         else {
-            AVL *node = tree;
+            AVLTree *node = tree;
             tree = MIN(node->right);
             tree->right = deleteMin(node->right);
             tree->left = node->left;
         }
     }
-    tree->number = 1 + size(tree->left) + size(tree->right);
     tree->height = 1 + MAX(heightAVL(tree->left), heightAVL(tree->right));
 
     return balance(tree);
@@ -187,7 +173,7 @@ void AVL_print_dot_null(int key, int nullcount, FILE *stream) {
     fprintf(stream, "    %d -> null%d;\n", key, nullcount);
 }
 
-void AVL_print_dot_aux(AVL *node, FILE *stream) {
+void AVL_print_dot_aux(AVLTree *node, FILE *stream) {
     static int nullcount = 0;
 
     if (node->left) {
@@ -205,8 +191,8 @@ void AVL_print_dot_aux(AVL *node, FILE *stream) {
         AVL_print_dot_null(node->data, nullcount++, stream);
 }
 
-void AVL_print_dot(AVL *tree, FILE *stream) {
-    fprintf(stream, "digraph BST {\n");
+void AVL_print_dot(AVLTree *tree, FILE *stream) {
+    fprintf(stream, "digraph BSTTree {\n");
     fprintf(stream, "    node [fontname=\"Arial\"];\n");
 
     if (!tree)

@@ -25,7 +25,7 @@ int main() {
     ofstream myfile("Tree.txt");
 
     if (myfile.is_open()) {
-        myfile << "i 1 i 2 i 4 i 7 i 9 i 600  i 230 \n i 111 \n i 222 i 309 i 700 i 800";
+        myfile << "i 21 i 22 i 5 i 8 d 21 f 8";
 
     }
     myfile.close();
@@ -99,6 +99,8 @@ int main() {
                     timer_AVL.reset();
                     Avl_tree = deleteNode(Avl_tree, value);
                     time_AVL += timer_AVL.elapsed();
+
+                    BST_tree = DeleteNode(BST_tree, value);
 
 
                     delete_val = false;

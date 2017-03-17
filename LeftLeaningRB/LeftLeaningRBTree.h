@@ -11,15 +11,15 @@
 static bool RED = true;
 static bool BLACK = false;
 
-class RedBlack {
+class LeftLeaningRBTree {
 public:
     int data;
-    RedBlack *left, *right;
+    LeftLeaningRBTree *left, *right;
     bool color;
 
 };
 
-bool search(RedBlack *tree, int data) {
+bool search(LeftLeaningRBTree *tree, int data) {
 
     if (tree == NULL)
         return false;
@@ -31,7 +31,7 @@ bool search(RedBlack *tree, int data) {
         return search(tree->left, data);
 }
 
-void flipColors(RedBlack *tree) {
+void flipColors(LeftLeaningRBTree *tree) {
 
     tree->color = !tree->color;
     tree->left->color = !tree->left->color;
@@ -39,9 +39,9 @@ void flipColors(RedBlack *tree) {
 
 }
 
-RedBlack *rotateLeft(RedBlack *tree) {
+LeftLeaningRBTree *rotateLeft(LeftLeaningRBTree *tree) {
 
-    RedBlack *node = tree->right;
+    LeftLeaningRBTree *node = tree->right;
     tree->right = node->left;
     node->left = tree;
     node->color = node->left->color;
@@ -51,9 +51,9 @@ RedBlack *rotateLeft(RedBlack *tree) {
 
 }
 
-RedBlack *rotateRight(RedBlack *tree) {
+LeftLeaningRBTree *rotateRight(LeftLeaningRBTree *tree) {
 
-    RedBlack *node = tree->left;
+    LeftLeaningRBTree *node = tree->left;
     tree->left = node->right;
     node->right = tree;
     node->color = node->right->color;
@@ -62,7 +62,7 @@ RedBlack *rotateRight(RedBlack *tree) {
     return node;
 }
 
-bool isRed(RedBlack *tree) {
+bool isRed(LeftLeaningRBTree *tree) {
 
     if (tree == NULL)
         return false;
@@ -70,9 +70,9 @@ bool isRed(RedBlack *tree) {
     return tree->color;
 }
 
-RedBlack *createNode(int data) {
+LeftLeaningRBTree *createNode(int data) {
 
-    RedBlack *node = new RedBlack();
+    LeftLeaningRBTree *node = new LeftLeaningRBTree();
     node->data = data;
     node->left = node->right = NULL;
     node->color = true;
@@ -81,7 +81,7 @@ RedBlack *createNode(int data) {
     return node;
 }
 
-RedBlack *insert(RedBlack *tree, int data) {
+LeftLeaningRBTree *insert(LeftLeaningRBTree *tree, int data) {
 
     if (tree == NULL)
         tree = createNode(data);
@@ -103,7 +103,7 @@ RedBlack *insert(RedBlack *tree, int data) {
 
 }
 
-void traverse_RedBlack_INORDER(RedBlack *tree) {
+void traverse_RedBlack_INORDER(LeftLeaningRBTree *tree) {
 
     if (tree == NULL)
         return;
@@ -119,7 +119,7 @@ void RB_print_dot_null(int key, int nullcount, FILE *stream) {
     fprintf(stream, "    %d -> null%d;\n", key, nullcount);
 }
 
-void RB_print_dot_aux(RedBlack *node, FILE *stream) {
+void RB_print_dot_aux(LeftLeaningRBTree *node, FILE *stream) {
     static int nullcount = 0;
 
     if (node->left) {
@@ -145,8 +145,8 @@ void RB_print_dot_aux(RedBlack *node, FILE *stream) {
         RB_print_dot_null(node->data, nullcount++, stream);
 }
 
-void RB_print_dot(RedBlack *tree, FILE *stream) {
-    fprintf(stream, "digraph BST {\n");
+void RB_print_dot(LeftLeaningRBTree *tree, FILE *stream) {
+    fprintf(stream, "digraph BSTTree {\n");
     fprintf(stream, "    node [fontname=\"Arial\"];\n");
 
     if (!tree)
@@ -154,16 +154,14 @@ void RB_print_dot(RedBlack *tree, FILE *stream) {
     else if (!tree->right && !tree->left)
         fprintf(stream, "    %d;\n", tree->data);
     else {
-        if (tree->color) {
-            fprintf(stream, "    %d [color=red];\n", tree->data);
-        }
+
         RB_print_dot_aux(tree, stream);
     }
     fprintf(stream, "}\n");
 }
 
 
-RedBlack *moveRedLeft(RedBlack *tree) {
+LeftLeaningRBTree *moveRedLeft(LeftLeaningRBTree *tree) {
 
     flipColors(tree);
     if (isRed(tree->right->left)) {
@@ -174,7 +172,7 @@ RedBlack *moveRedLeft(RedBlack *tree) {
     return tree;
 }
 
-RedBlack *moveRedRight(RedBlack *tree) {
+LeftLeaningRBTree *moveRedRight(LeftLeaningRBTree *tree) {
     flipColors(tree);
     if (isRed(tree->left->left)) {
         tree = rotateRight(tree);
@@ -183,7 +181,7 @@ RedBlack *moveRedRight(RedBlack *tree) {
     return tree;
 }
 
-RedBlack *balance(RedBlack *tree) {
+LeftLeaningRBTree *balance(LeftLeaningRBTree *tree) {
 
     if (tree == NULL)
         return NULL;
@@ -198,7 +196,7 @@ RedBlack *balance(RedBlack *tree) {
     return tree;
 }
 
-RedBlack *deleteMin(RedBlack *tree) {
+LeftLeaningRBTree *deleteMin(LeftLeaningRBTree *tree) {
     if (tree->left == NULL)
         return NULL;
 
@@ -209,7 +207,7 @@ RedBlack *deleteMin(RedBlack *tree) {
     return balance(tree);
 }
 
-RedBlack *MIN(RedBlack *tree) {
+LeftLeaningRBTree *MIN(LeftLeaningRBTree *tree) {
     // assert x != null;
     if (tree->left == NULL)
         return tree;
@@ -217,7 +215,7 @@ RedBlack *MIN(RedBlack *tree) {
     return MIN(tree->left);
 }
 
-RedBlack *deleteNode(RedBlack *tree, int data) {
+LeftLeaningRBTree *deleteNode(LeftLeaningRBTree *tree, int data) {
 
     if (tree == NULL)
         return tree;
@@ -234,7 +232,7 @@ RedBlack *deleteNode(RedBlack *tree, int data) {
         if (!isRed(tree->right) && !isRed(tree->right->left))
             tree = moveRedRight(tree);
         if (tree->data == data) {
-            RedBlack *node = MIN(tree->right);
+            LeftLeaningRBTree *node = MIN(tree->right);
             tree->data = node->data;
             tree->right = deleteMin(tree->right);
         } else tree->right = deleteNode(tree->right, data);

@@ -7,22 +7,22 @@
 
 #include <stdio.h>
 
-class BST {
+class BSTTree {
 public:
     int data;
-    BST *left;
-    BST *right;
+    BSTTree *left;
+    BSTTree *right;
 };
 
-BST *createNode_BST(int data) {
-    BST *node = new BST();
+BSTTree *createNode_BST(int data) {
+    BSTTree *node = new BSTTree();
     node->data = data;
     node->left = node->right = NULL;
 
     return node;
 }
 
-BST *insert(BST *root, int data) {
+BSTTree *insert(BSTTree *root, int data) {
     if (root == NULL) {
         root = createNode_BST(data);
     }
@@ -38,7 +38,7 @@ BST *insert(BST *root, int data) {
 }
 
 
-bool search(BST *root, int data) {
+bool search(BSTTree *root, int data) {
 
     if (root == NULL)
         return false;
@@ -50,7 +50,7 @@ bool search(BST *root, int data) {
         return search(root->left, data);
 }
 
-int findMin(BST *root) {
+int findMin(BSTTree *root) {
 
     while (root->left != NULL)
         root = root->left;
@@ -58,7 +58,7 @@ int findMin(BST *root) {
     return root->data;
 }
 
-BST *DeleteNode(BST *root, int data) {
+BSTTree *DeleteNode(BSTTree *root, int data) {
 
     if (root == NULL)
         return root;
@@ -75,13 +75,13 @@ BST *DeleteNode(BST *root, int data) {
         }
             // one child case (right)
         else if (root->left == NULL) {
-            BST *current = root;
+            BSTTree *current = root;
             root = root->right;
             delete (current);
         }
             // one child case (left)
         else if (root->right == NULL) {
-            BST *current = root;
+            BSTTree *current = root;
             root = root->left;
             delete (current);
         }
@@ -89,13 +89,13 @@ BST *DeleteNode(BST *root, int data) {
         else {
             int min = findMin(root->right);
             root->data = min;
-            root->right = DeleteNode(root->right, data);
+            root->right = DeleteNode(root->right, min);
         }
     }
     return root;
 }
 
-void traverse_BST_INORDER(BST *root) {
+void traverse_BST_INORDER(BSTTree *root) {
 
 
     if (root == NULL)
@@ -106,13 +106,12 @@ void traverse_BST_INORDER(BST *root) {
 }
 
 
-
 void BST_print_dot_null(int key, int nullcount, FILE *stream) {
     fprintf(stream, "    null%d [shape=point];\n", nullcount);
     fprintf(stream, "    %d -> null%d;\n", key, nullcount);
 }
 
-void BST_print_dot_aux(BST *node, FILE *stream) {
+void BST_print_dot_aux(BSTTree *node, FILE *stream) {
     static int nullcount = 0;
 
     if (node->left) {
@@ -130,8 +129,8 @@ void BST_print_dot_aux(BST *node, FILE *stream) {
         BST_print_dot_null(node->data, nullcount++, stream);
 }
 
-void BST_print_dot(BST *tree, FILE *stream) {
-    fprintf(stream, "digraph BST {\n");
+void BST_print_dot(BSTTree *tree, FILE *stream) {
+    fprintf(stream, "digraph BSTTree {\n");
     fprintf(stream, "    node [fontname=\"Arial\"];\n");
 
     if (!tree)

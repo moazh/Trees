@@ -1,9 +1,9 @@
 #include <iostream>
 
 #include "Timer.h"
-#include "RedBlack_Tree/RedBlack.h"
-#include "AVL_Tree/AVL.h"
-#include "BST_Tree/BST.h"
+#include "LeftLeaningRB/LeftLeaningRBTree.h"
+#include "AVL/AVLTree.h"
+#include "BST/BSTTree.h"
 
 #include <fstream>
 #include <sstream>
@@ -30,9 +30,9 @@ int main() {
     }
     myfile.close();
 
-    RedBlack *Red_tree;
-    AVL *Avl_tree;
-    BST *BST_tree;
+    LeftLeaningRBTree *Red_tree;
+    AVLTree *Avl_tree;
+    BSTTree *BST_tree;
 
     while (std::getline(infile, line))  // this does the checking!
     {
